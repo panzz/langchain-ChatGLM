@@ -398,7 +398,7 @@ def api_start(host, port):
 
 if __name__ == "__main__":
     parser.add_argument("--host", type=str, default="0.0.0.0")
-    parser.add_argument("--port", type=int, default=7861)
+    parser.add_argument("--port", type=int, default=8000)
     # 初始化消息
     args = None
     args = parser.parse_args()
