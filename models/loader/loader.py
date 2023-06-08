@@ -41,6 +41,7 @@ class LoaderCheckPoint:
     llm_device = LLM_DEVICE
 
     def __init__(self, params: dict = None):
+        print ('loader::__init__> params:%r' % (params))
         """
         模型初始化
         :param params:
@@ -70,6 +71,7 @@ class LoaderCheckPoint:
 
         model_config = AutoConfig.from_pretrained(checkpoint, trust_remote_code=True)
 
+        print ('loader::_load_model_config> model_config:%r' % (model_config))
         return model_config
 
     def _load_model(self, model_name):
@@ -91,18 +93,22 @@ class LoaderCheckPoint:
             if not self.no_remote_model:
                 checkpoint = model_name
 
+        print ('loader::_load_model> checkpoint:%r' % (checkpoint))
         if 'chatglm' in model_name.lower():
             LoaderClass = AutoModel
         else:
             LoaderClass = AutoModelForCausalLM
 
+        print ('loader::_load_model> llm_device:%r' % (self.llm_device.lower()))
         # Load the model in simple 16-bit mode by default
         if not any([self.llm_device.lower() == "cpu",
                     self.load_in_8bit, self.is_llamacpp]):
 
+            print ('loader::_load_model> torch.cuda:%r' % ( torch.cuda.is_available()))
             if torch.cuda.is_available() and self.llm_device.lower().startswith("cuda"):
                 # 根据当前设备GPU数量决定是否进行多卡部署
                 num_gpus = torch.cuda.device_count()
+                print ('loader::_load_model> num_gpus:%r' % ( num_gpus))
                 if num_gpus < 2 and self.device_map is None:
                     model = (
                         LoaderClass.from_pretrained(checkpoint,
