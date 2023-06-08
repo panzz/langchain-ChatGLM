@@ -41,6 +41,7 @@ class LoaderCheckPoint:
     llm_device = LLM_DEVICE
 
     def __init__(self, params: dict = None):
+        print ('loader::__init__> params:%r' % (params))
         """
         模型初始化
         :param params:
@@ -70,6 +71,7 @@ class LoaderCheckPoint:
 
         model_config = AutoConfig.from_pretrained(checkpoint, trust_remote_code=True)
 
+        print ('loader::_load_model_config> model_config:%r' % (model_config))
         return model_config
 
     def _load_model(self, model_name):
@@ -91,6 +93,7 @@ class LoaderCheckPoint:
             if not self.no_remote_model:
                 checkpoint = model_name
 
+        print ('loader::_load_model> checkpoint:%r' % (checkpoint))
         if 'chatglm' in model_name.lower():
             LoaderClass = AutoModel
         else:
