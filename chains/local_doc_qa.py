@@ -201,6 +201,7 @@ class LocalDocQA:
                  top_k=VECTOR_SEARCH_TOP_K,
                  ):
         self.llm = llm_model
+        print ('LocalDocQA> embedding_model_dict[%r]:%r, embedding_device:%r' % (embedding_model, embedding_model_dict[embedding_model], embedding_device))
         self.embeddings = HuggingFaceEmbeddings(model_name=embedding_model_dict[embedding_model],
                                                 model_kwargs={'device': embedding_device})
         self.top_k = top_k

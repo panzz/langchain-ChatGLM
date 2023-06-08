@@ -99,13 +99,16 @@ class LoaderCheckPoint:
         else:
             LoaderClass = AutoModelForCausalLM
 
+        print ('loader::_load_model> llm_device:%r' % (self.llm_device.lower()))
         # Load the model in simple 16-bit mode by default
         if not any([self.llm_device.lower() == "cpu",
                     self.load_in_8bit, self.is_llamacpp]):
 
+            print ('loader::_load_model> torch.cuda:%r' % ( torch.cuda.is_available()))
             if torch.cuda.is_available() and self.llm_device.lower().startswith("cuda"):
                 # 根据当前设备GPU数量决定是否进行多卡部署
                 num_gpus = torch.cuda.device_count()
+                print ('loader::_load_model> num_gpus:%r' % ( num_gpus))
                 if num_gpus < 2 and self.device_map is None:
                     model = (
                         LoaderClass.from_pretrained(checkpoint,

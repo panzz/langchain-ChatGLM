@@ -7,6 +7,7 @@ import models.shared as shared
 from models.loader import LoaderCheckPoint
 nltk.data.path = [NLTK_DATA_PATH] + nltk.data.path
 
+print ('model_config> NLTK_DATA_PATH:%r, nltk.data.path:%r' % (NLTK_DATA_PATH, nltk.data.path))
 # Show reply with source text from input document
 REPLY_WITH_SOURCE = True
 

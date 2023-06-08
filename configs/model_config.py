@@ -9,11 +9,17 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logging.basicConfig(format=LOG_FORMAT)
 
+
+# 本地模型存放的位置
+MODEL_DIR = "model/"
+# 本地lora存放的位置
+LORA_DIR = "loras/"
+
 embedding_model_dict = {
-    "ernie-tiny": "nghuyong/ernie-3.0-nano-zh",
-    "ernie-base": "nghuyong/ernie-3.0-base-zh",
-    "text2vec-base": "shibing624/text2vec-base-chinese",
-    "text2vec": "GanymedeNil/text2vec-large-chinese",
+    "ernie-tiny": MODEL_DIR + "nghuyong/ernie-3.0-nano-zh",
+    "ernie-base": MODEL_DIR + "nghuyong/ernie-3.0-base-zh",
+    "text2vec-base": MODEL_DIR + "shibing624/text2vec-base-chinese",
+    "text2vec": MODEL_DIR + "GanymedeNil/text2vec-large-chinese",
 }
 
 # Embedding model name
@@ -35,7 +41,7 @@ llm_model_dict = {
     "chatglm-6b-int4": {
         "name": "chatglm-6b-int4",
         "pretrained_model_name": "THUDM/chatglm-6b-int4",
-        "local_model_path": None,
+        "local_model_path": MODEL_DIR + 'chatglm-6b-int4', #None,
         "provides": "ChatGLM"
     },
     "chatglm-6b-int8": {
@@ -47,7 +53,7 @@ llm_model_dict = {
     "chatglm-6b": {
         "name": "chatglm-6b",
         "pretrained_model_name": "THUDM/chatglm-6b",
-        "local_model_path": 'model/chatglm-6b', #None,
+        "local_model_path": MODEL_DIR + 'chatglm-6b', #None,
         "provides": "ChatGLM"
     },
 
@@ -97,10 +103,6 @@ NO_REMOTE_MODEL = True # False
 LOAD_IN_8BIT = False
 # Load the model with bfloat16 precision. Requires NVIDIA Ampere GPU.
 BF16 = False
-# 本地模型存放的位置
-MODEL_DIR = "model/"
-# 本地lora存放的位置
-LORA_DIR = "loras/"
 
 # LLM lora path，默认为空，如果有请直接指定文件夹路径
 LLM_LORA_PATH = ""
