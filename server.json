@@ -1,0 +1,17 @@
+{
+  "apps": [
+    {
+      "name": "langchain_chatglm",
+      "script": "api.py",
+      "args": [],
+      "exec_mode": "fork",
+      "instances": "2",
+      "wait_ready": true,
+      "autorestart": false,
+      "min_uptime": "60s",
+      "max_restarts": 30,
+      "interpreter": "D:\\ShareFolder\\_LIPan\\vobs\\_dev\\_chatbot\\langchain-ChatGLM",
+      "watch": true
+    }
+  ]
+}

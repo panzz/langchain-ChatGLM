@@ -1,0 +1,29 @@
+{
+  "name": "langchain-chatglm",
+  "version": "1.0.0",
+  "description": "## 介绍",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs",
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "sh run.sh",
+    "install": "sh install.sh",
+    "serve": "pm2 start server.json",
+    "serve-list": "pm2 list",
+    "serve-monit": "pm2 monit",
+    "serve-stop": "pm2 stop server.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/panzz/langchain-ChatGLM.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/panzz/langchain-ChatGLM/issues"
+  },
+  "homepage": "https://github.com/panzz/langchain-ChatGLM#readme"
+}
