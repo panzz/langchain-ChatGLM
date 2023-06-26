@@ -9,8 +9,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "sh run.sh",
-    "install": "sh install.sh",
+    "dev": "run.bat",
+    "install": "install.bat",
     "serve": "pm2 start server.json",
     "serve-list": "pm2 list",
     "serve-monit": "pm2 monit",
