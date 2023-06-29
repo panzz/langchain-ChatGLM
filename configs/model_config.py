@@ -4,14 +4,20 @@ import os
 import logging
 import uuid
 
-LOG_FORMAT = "%(levelname) -5s %(asctime)s" "-1d: %(message)s"
+# LOG_FORMAT = "%(levelname) -5s %(asctime)s" "-1d: %(message)s"
+LOG_FORMAT = "%(asctime)s %(module)s.%(funcName)s(%(lineno)d,%(levelname)s) %(message)s"
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 logging.basicConfig(format=LOG_FORMAT)
 
 
 # 本地模型存放的位置
-MODEL_DIR = "model/"
+# DIR = os.path.dirname(os.path.dirname(__file__))
+DIR = os.path.dirname(os.path.dirname(os.path.dirname(__file__)))
+print (f'DIR: {DIR}')
+# MODEL_DIR = "model/"
+MODEL_DIR = os.path.join(os.path.dirname(DIR), "common_models/")
+print (f'MODEL_DIR: {MODEL_DIR}')
 # 本地lora存放的位置
 LORA_DIR = "loras/"
 
@@ -27,7 +33,7 @@ EMBEDDING_MODEL = "text2vec"
 
 # Embedding running device
 EMBEDDING_DEVICE = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
-print ('model_config> EMBEDDING_DEVICE:%r' % (EMBEDDING_DEVICE))
+# print ('model_config> EMBEDDING_DEVICE:%r' % (EMBEDDING_DEVICE))
 
 # supported LLM models
 # llm_model_dict 处理了loader的一些预设行为，如加载位置，模型名称，模型处理器实例
@@ -41,7 +47,7 @@ llm_model_dict = {
     "chatglm-6b-int4": {
         "name": "chatglm-6b-int4",
         "pretrained_model_name": "THUDM/chatglm-6b-int4",
-        "local_model_path": MODEL_DIR + 'chatglm-6b-int4', #None,
+        "local_model_path": MODEL_DIR + 'THUDM/chatglm-6b-int4', #None,
         "provides": "ChatGLM"
     },
     "chatglm-6b-int8": {
@@ -53,7 +59,7 @@ llm_model_dict = {
     "chatglm-6b": {
         "name": "chatglm-6b",
         "pretrained_model_name": "THUDM/chatglm-6b",
-        "local_model_path": MODEL_DIR + 'chatglm-6b', #None,
+        "local_model_path": MODEL_DIR + 'THUDM/chatglm-6b', #None,
         "provides": "ChatGLM"
     },
 
@@ -87,6 +93,16 @@ llm_model_dict = {
     },
 
     # 通过 fastchat 调用的模型请参考如下格式
+    "fastchat-gpt-3.5-turbo": {
+        "name": "gpt-3.5-turbo",  # "name"修改为fastchat服务中的"model_name"
+        "pretrained_model_name": "chatglm-6b",
+        "local_model_path": None,
+        "provides": "FastChatOpenAILLM",  # 使用fastchat api时，需保证"provides"为"FastChatOpenAILLM"
+        # "api_base_url": "http://localhost:8000/v1"  # "name"修改为fastchat服务中的"api_base_url"
+        "api_base_url": "http://52.74.105.58/v1"  # "name"修改为fastchat服务中的"api_base_url"
+    },
+
+    # 通过 fastchat 调用的模型请参考如下格式
     "fastchat-vicuna-13b-hf": {
         "name": "vicuna-13b-hf",  # "name"修改为fastchat服务中的"model_name"
         "pretrained_model_name": "vicuna-13b-hf",
@@ -97,8 +113,8 @@ llm_model_dict = {
 }
 
 # LLM 名称
-# LLM_MODEL = "chatglm-6b"
-LLM_MODEL = "fastchat-chatglm-6b"
+# LLM_MODEL = "chatglm-6b-int4"
+LLM_MODEL = "fastchat-gpt-3.5-turbo"
 # 如果你需要加载本地的model，指定这个参数  ` --no-remote-model`，或者下方参数修改为 `True`
 NO_REMOTE_MODEL = True # False
 # 量化加载8bit 模型
@@ -118,7 +134,7 @@ USE_PTUNING_V2 = False
 
 # LLM running device
 LLM_DEVICE = "cuda" if torch.cuda.is_available() else "mps" if torch.backends.mps.is_available() else "cpu"
-print ('model_config> LLM_DEVICE:%r' % (LLM_DEVICE))
+# print ('model_config> LLM_DEVICE:%r' % (LLM_DEVICE))
 
 VS_ROOT_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "vector_store")
 
@@ -156,8 +172,11 @@ logger.info(f"""
 loading model config
 llm device: {LLM_DEVICE}
 embedding device: {EMBEDDING_DEVICE}
-dir: {os.path.dirname(os.path.dirname(__file__))}
+dir: {DIR}
 flagging username: {FLAG_USER_NAME}
+NLTK_DATA_PATH: {NLTK_DATA_PATH}
+model: {LLM_MODEL}
+llm_model_dict: {llm_model_dict[LLM_MODEL]}
 """)
 
 # 是否开启跨域，默认为False，如果需要开启，请设置为True

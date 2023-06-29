@@ -103,12 +103,13 @@ def init_model():
     args_dict = vars(args)
     shared.loaderCheckPoint = LoaderCheckPoint(args_dict)
     llm_model_ins = shared.loaderLLM()
+    print(f'init_model> llm_model_ins:{llm_model_ins}')
     llm_model_ins.set_history_len(LLM_HISTORY_LEN)
     try:
         local_doc_qa.init_cfg(llm_model=llm_model_ins)
         generator = local_doc_qa.llm.generatorAnswer("你好")
         for answer_result in generator:
-            print(answer_result.llm_output)
+            print(f'init_model> llm_output:{answer_result.llm_output}')
         reply = """模型已成功加载，可以开始对话，或从右侧选择模式后开始对话"""
         logger.info(reply)
         return reply

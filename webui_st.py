@@ -110,11 +110,13 @@ def init_model(llm_model: str = 'chat-glm-6b', embedding_model: str = 'text2vec'
     try:
         local_doc_qa.init_cfg(llm_model=llm_model_ins,
                               embedding_model=embedding_model)
+        logger.info(f"init_model> init_cfg")
         generator = local_doc_qa.llm.generatorAnswer("你好")
+        logger.info(f"init_model> 你好")
         for answer_result in generator:
-            print(answer_result.llm_output)
+            print(f"llm_output:{answer_result.llm_output}")
         reply = """模型已成功加载，可以开始对话，或从右侧选择模式后开始对话"""
-        logger.info(reply)
+        logger.info(f"init_model> reply: {reply}")
     except Exception as e:
         logger.error(e)
         reply = """模型未成功加载，请到页面左上角"模型配置"选项卡中重新选择后点击"加载模型"按钮"""
@@ -201,11 +203,11 @@ webui_title = """
 
 ###### 配置项 #####
 class ST_CONFIG:
-    user_bg_color = '#77ff77'
+    user_bg_color = None #'#77ff77'
     user_icon = 'https://tse2-mm.cn.bing.net/th/id/OIP-C.LTTKrxNWDr_k74wz6jKqBgHaHa?w=203&h=203&c=7&r=0&o=5&pid=1.7'
-    robot_bg_color = '#ccccee'
-    robot_icon = 'https://ts1.cn.mm.bing.net/th/id/R-C.5302e2cc6f5c7c4933ebb3394e0c41bc?rik=z4u%2b7efba5Mgxw&riu=http%3a%2f%2fcomic-cons.xyz%2fwp-content%2fuploads%2fStar-Wars-avatar-icon-C3PO.png&ehk=kBBvCvpJMHPVpdfpw1GaH%2brbOaIoHjY5Ua9PKcIs%2bAc%3d&risl=&pid=ImgRaw&r=0'
-    default_mode = '知识库问答'
+    robot_bg_color = None #'#ccccee'
+    robot_icon = 'https://developerforum.lenovo.com/s3/dev-forum-prod/assets/8f5a731f-20ad-478b-8534-7e75b05c07eb' #'https://ts1.cn.mm.bing.net/th/id/R-C.5302e2cc6f5c7c4933ebb3394e0c41bc?rik=z4u%2b7efba5Mgxw&riu=http%3a%2f%2fcomic-cons.xyz%2fwp-content%2fuploads%2fStar-Wars-avatar-icon-C3PO.png&ehk=kBBvCvpJMHPVpdfpw1GaH%2brbOaIoHjY5Ua9PKcIs%2bAc%3d&risl=&pid=ImgRaw&r=0'
+    default_mode = 'LLM 对话'
     defalut_kb = ''
 ######        #####
 
@@ -514,9 +516,9 @@ with st.form('my_form', clear_on_submit=True):
             elif use_kb_mode(mode):
                 robot_say('正在思考...', vs_path)
                 last_response = output_messages()
+                # print(f"VS_ROOT_PATH:{VS_ROOT_PATH}, vs_path:{vs_path}")
                 for history, _ in answer(q,
-                                         vs_path=os.path.join(
-                                             VS_ROOT_PATH, vs_path),
+                                         vs_path=os.path.join(VS_ROOT_PATH, vs_path),
                                          history=[],
                                          mode=mode,
                                          score_threshold=score_threshold,
