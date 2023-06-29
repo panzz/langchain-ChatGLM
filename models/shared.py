@@ -18,7 +18,7 @@ def loaderLLM(llm_model: str = None, no_remote_model: bool = False, use_ptuning_
     """
     pre_model_name = loaderCheckPoint.model_name
     llm_model_info = llm_model_dict[pre_model_name]
-
+    print(f"loaderLLM> pre_model_name:{pre_model_name}, llm_model_info:{llm_model_info}")
     if no_remote_model:
         loaderCheckPoint.no_remote_model = no_remote_model
     if use_ptuning_v2:
@@ -27,21 +27,29 @@ def loaderLLM(llm_model: str = None, no_remote_model: bool = False, use_ptuning_
     if llm_model:
         llm_model_info = llm_model_dict[llm_model]
 
+    print(f"loaderLLM> llm_model:{llm_model},llm_model_info:{llm_model_info}")
     if loaderCheckPoint.no_remote_model:
         loaderCheckPoint.model_name = llm_model_info['name']
     else:
         loaderCheckPoint.model_name = llm_model_info['pretrained_model_name']
 
     loaderCheckPoint.model_path = llm_model_info["local_model_path"]
+    print(f"loaderLLM> loaderCheckPoint:{loaderCheckPoint}")
 
-    if 'FastChatOpenAILLM' in llm_model_info["provides"]:
+    print(f"loaderLLM> llm_model_info({(x in llm_model_info['provides'] for x in ['FastChatOpenAILLM', 'FastChatAPILLM'])}):{llm_model_info['provides']}")
+    # if 'FastChatOpenAILLM' or 'FastChatAPILLM' in llm_model_info["provides"]:
+    if (x in llm_model_info['provides'] for x in ['FastChatOpenAILLM', 'FastChatAPILLM']) :
         loaderCheckPoint.unload_model()
     else:
         loaderCheckPoint.reload_model()
 
     provides_class = getattr(sys.modules['models'], llm_model_info['provides'])
     modelInsLLM = provides_class(checkPoint=loaderCheckPoint)
-    if 'FastChatOpenAILLM' in llm_model_info["provides"]:
+    print(f"loaderLLM> modelInsLLM:{modelInsLLM}")
+    
+    print(f"loaderLLM> llm_model_info({(x in llm_model_info['provides'] for x in ['FastChatOpenAILLM', 'FastChatAPILLM'])}):{llm_model_info}")
+    # if 'FastChatOpenAILLM' in llm_model_info["provides"]:
+    if (x in llm_model_info['provides'] for x in ['FastChatOpenAILLM', 'FastChatAPILLM']) :
         modelInsLLM.set_api_base_url(llm_model_info['api_base_url'])
         modelInsLLM.call_model_name(llm_model_info['name'])
     return modelInsLLM

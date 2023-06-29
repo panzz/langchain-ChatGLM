@@ -66,6 +66,7 @@ class FastChatOpenAILLM(RemoteRpcModel, LLM, ABC):
         self.api_base_url = api_base_url
 
     def call_model_name(self, model_name):
+        print(f"FastChatOpenAILLM> call_model_name model_name:{model_name}")
         self.model_name = model_name
 
     def _call(self, prompt: str, stop: Optional[List[str]] = None) -> str:
@@ -95,17 +96,22 @@ class FastChatOpenAILLM(RemoteRpcModel, LLM, ABC):
                         history: List[List[str]] = [],
                         streaming: bool = False):
 
+        print(f"generatorAnswer> prompt:{prompt},history:{history}, streaming:{streaming}")
         try:
             import openai
             # Not support yet
-            openai.api_key = "EMPTY"
+            # openai.api_key = "EMPTY"
+            openai.api_key = "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"
+            print(f"generatorAnswer> openai.api_key:{openai.api_key}")
             openai.api_base = self.api_base_url
+            print(f"generatorAnswer> openai.api_base:{openai.api_base}")
         except ImportError:
             raise ValueError(
                 "Could not import openai python package. "
                 "Please install it with `pip install openai`."
             )
         # create a chat completion
+        print(f"generatorAnswer> model_name:{self.model_name}")
         completion = openai.ChatCompletion.create(
             model=self.model_name,
             messages=self.build_message_list(prompt)
